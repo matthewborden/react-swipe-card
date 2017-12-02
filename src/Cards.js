@@ -37,7 +37,7 @@ class SwipeCards extends Component {
   }
 
   setSize () {
-    const container = ReactDOM.findDOMNode(this)
+    const container = ReactDOM.findDOMNode(this.currentEl);
     const containerSize = {
       x: container.offsetWidth,
       y: container.offsetHeight
@@ -48,7 +48,7 @@ class SwipeCards extends Component {
   render () {
     const { index, containerSize } = this.state
     const { children, className, onSwipeTop, onSwipeBottom } = this.props
-    if (!containerSize.x || !containerSize.y) return  <div className={className} />
+    if (!containerSize.x || !containerSize.y) return  <div ref={(currentEl) => { this.currentEl = currentEl; }} className={className} />
 
     const _cards = children.reduce((memo, c, i) => {
       if (index > i) return memo
@@ -62,9 +62,9 @@ class SwipeCards extends Component {
       }
       return [ cloneElement(c, props), ...memo ]
     }, [])
-    
+
     return (
-      <div className={className}>
+      <div ref={(currentEl) => { this.currentEl = currentEl; }} className={className}>
         {DIRECTIONS.map(d => 
           <div key={d} className={`${this.state[`alert${d}`] ? 'alert-visible': ''} alert-${d.toLowerCase()} alert`}>
             {this.props[`alert${d}`]}
